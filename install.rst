@@ -38,7 +38,7 @@ Install packages that could be missing for the c++ library
 
 .. code:: shell
 
-  sudo apt-get install bison flex cmake g++ gfortran libarmadillo-dev libboost-all-dev
+  sudo apt-get install bison flex cmake g++ gfortran libarmadillo-dev libboost-all-dev libgsl-dev
 
 
 The following packages could be missing for the python wrapper
