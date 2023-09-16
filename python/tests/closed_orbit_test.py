@@ -15,14 +15,6 @@ import gtpsa
 from thor_scsi.factory import accelerator_from_config
 from thor_scsi.utils.closed_orbit import compute_closed_orbit
 
-# test of
-path = (
-    Path(os.environ["HOME"])
-    / "Devel"
-    / "gitlab"
-    / "dt4acc"
-    / "lattices/b2_stduser_beamports_blm_tracy_corr.lat"
-)
 
 path = (
     Path(os.path.dirname(__file__))
