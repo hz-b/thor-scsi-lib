@@ -182,7 +182,8 @@ def test_knobbable_dx_set_from_float():
     quad.set_dx(dx)
     quad.set_dy(dy)
 
-    # roll crashes the process ...
+    # roll crashes the process ... not any more
+    # fixed upstream in gtpsa
     rollk = gtpsa.TpsaOrDouble(roll)
     quad.set_roll(rollk)
 
