@@ -24,7 +24,7 @@ def test_knob_quadrupole():
     assert nquad.name == quad.name
     assert nquad.get_length() == pytest.approx(quad.get_length(), rel=1e-12)
     # test of to_object should be avoided
-    K_check = nquad.get_main_multipole_strength().to_object()
+    K_check = nquad.get_main_multipole_strength()
     assert K_check == pytest.approx(K, rel=1e-12)
 
 
@@ -193,6 +193,7 @@ def test_knobbable_dx_set_from_float():
 def test_knobbalbe_muls_set_from_float():
     from thor_scsi.lib import TwoDimensionalMultipolesTpsa as Mul2DTpsa
     m = Mul2DTpsa(0)
+    print(type(m))
     m.set_multipole(3, 1e-3+1e-2j)
 
 

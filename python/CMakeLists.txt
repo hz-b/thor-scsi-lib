@@ -39,7 +39,15 @@ target_link_libraries(lib
   )
 
 pybind11_extension(lib)
-pybind11_strip(lib)
+
+# I want not to strip
+if(CMAKE_BUILD_TYPE STREQUAL Debug)
+  message(STATUS "${CMAKE_BUILD_TYPE} not 'Debug': stripping python binary")
+
+  # pybind11_strip(lib)
+else()
+  message(STATUS "${CMAKE_BUILD_TYPE} 'Debug': not stripping python binary")
+endif()
 set_target_properties(lib PROPERTIES CXX_VISIBILITY_PRESET "hidden"
                                          CUDA_VISIBILITY_PRESET "hidden")
 
