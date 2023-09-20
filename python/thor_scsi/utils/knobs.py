@@ -34,7 +34,6 @@ def make_magnet_offset_knobbable(
     """
     dxv = magnet.get_dx()
     dyv = magnet.get_dy()
-    print(type(magnet), type(dxv), type(dyv))
     dx = gtpsa.tpsa(desc, po, mapping=named_index)
     dy = gtpsa.tpsa(desc, po, mapping=named_index)
     dx.set_knob(dxv, "dx")
