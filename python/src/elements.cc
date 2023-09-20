@@ -138,10 +138,8 @@ template<typename double_type, typename Class>
 void field_kick_add_set_methods(py::class_<Class> t_mapper)
 {
 	t_mapper
-		.def("set_dx", [](Class &kick, const double_type& dx)
-			     {kick.getTransform()->setDx(dx);})
-		.def("set_dy", [](Class &kick, const double_type& dy)
-			     {kick.getTransform()->setDy(dy);})
+		.def("set_dx", [](Class &kick, const double_type& dx) { kick.getTransform()->setDx(dx) ; })
+		.def("set_dy", [](Class &kick, const double_type& dy) { kick.getTransform()->setDy(dy) ; })
 		/*
 		 * Todo: seems to crash the interpreter
 		*/
@@ -158,9 +156,9 @@ template<typename Class>
 void field_kick_add_get_methods(py::class_<Class> t_mapper)
 {
 	t_mapper
-		.def("get_dx",   [](Class &kick) { return gpy::to_pyobject(kick.getTransform()->getDx());   })
-		.def("get_dy",   [](Class &kick) { return gpy::to_pyobject(kick.getTransform()->getDy());   })
-		.def("get_roll", [](Class &kick) { return gpy::to_pyobject(kick.getTransform()->getRoll()); })
+		.def("get_dx",   [](Class &kick) { return gpy::to_pyobject( kick.getTransform()->getDx());   })
+		.def("get_dy",   [](Class &kick) { return gpy::to_pyobject( kick.getTransform()->getDy());   })
+		.def("get_roll", [](Class &kick) { return gpy::to_pyobject( kick.getTransform()->getRoll()); })
 		;
 }
 
@@ -173,42 +171,25 @@ void field_kick_add_methods(py::class_<Class> t_mapper)
 	field_kick_add_get_methods(t_mapper);
 
 	t_mapper
-		.def("is_thick",
-		     &Class::isThick)
-		.def("as_thick",
-		     &Class::asThick)
-		.def("get_number_of_integration_steps",
-		     &Class::getNumberOfIntegrationSteps)
-		.def("set_number_of_integration_steps",
-		     &Class::setNumberOfIntegrationSteps)
-		.def("get_integration_method",
-		     &Class::getIntegrationMethod)
-		.def("get_curvature",
-		     &Class::getCurvature)
-		.def("set_curvature",
-		     &Class::setCurvature)
-		.def("assuming_curved_trajectory",
-		     &Class::assumingCurvedTrajectory)
-		.def("get_bending_angle",
-		     &Class::getBendingAngle)
-		.def("set_bending_angle",
-		     &Class::setBendingAngle)
-		.def("set_entrance_angle",
-		     &Class::setEntranceAngle)
-		.def("get_entrance_angle",
-		     &Class::getEntranceAngle)
-		.def("set_exit_angle",
-		     &Class::setExitAngle)
-		.def("get_exit_angle",
-		     &Class::getExitAngle)
-		.def("get_radiation_delegate",
-		     &Class::getRadiationDelegate)
-		.def("set_radiation_delegate",
-		     &Class::setRadiationDelegate)
-		.def("get_field_interpolator",
-		     &Class::getFieldInterpolator)
-		.def("set_field_interpolator",
-		     &Class::setFieldInterpolator)
+		.def("is_thick",		        &Class::isThick                      )
+                .def("as_thick",                        &Class::asThick                      )
+                .def("get_number_of_integration_steps", &Class::getNumberOfIntegrationSteps  )
+                .def("set_number_of_integration_steps", &Class::setNumberOfIntegrationSteps  )
+                .def("get_integration_method",          &Class::getIntegrationMethod         )
+                .def("assuming_curved_trajectory",      &Class::assumingCurvedTrajectory     )
+                .def("set_curvature",                   &Class::setCurvature                 )
+                .def("set_bending_angle",               &Class::setBendingAngle              )
+                .def("set_entrance_angle",              &Class::setEntranceAngle             )
+                .def("set_exit_angle",                  &Class::setExitAngle                 )
+                .def("get_radiation_delegate",          &Class::getRadiationDelegate         )
+                .def("set_radiation_delegate",          &Class::setRadiationDelegate         )
+                .def("get_field_interpolator",          &Class::getFieldInterpolator         )
+                .def("set_field_interpolator",          &Class::setFieldInterpolator         )
+
+                .def("get_curvature",      [](const Class& kick) { return gpy::to_pyobject( kick.getCurvature()     ); })
+                .def("get_bending_angle",  [](const Class& kick) { return gpy::to_pyobject( kick.getBendingAngle()  ); })
+                .def("get_entrance_angle", [](const Class& kick) { return gpy::to_pyobject( kick.getEntranceAngle() ); })
+                .def("get_exit_angle",     [](const Class& kick) { return gpy::to_pyobject( kick.getExitAngle()     ); })
 		;
 }
 
@@ -237,8 +218,9 @@ void classical_magnet_add_methods(py::class_<Class> t_mapper)
 		// .def("set_multipoles",&Class::setMultipoles)
 		.def("get_main_multipole_number",
 		     &Class::getMainMultipoleNumber)
-		.def("get_main_multipole_strength",
-		     &Class::getMainMultipoleStrength)
+		.def("get_main_multipole_strength", [](Class& inst){
+			return gpy::to_pyobject(inst.getMainMultipoleStrength());
+		})
 		.def("get_main_multipole_strength_component",
 		     &Class::getMainMultipoleStrengthComponent)
 
@@ -325,11 +307,7 @@ struct TemplatedClasses
 		py::class_<QuadK, std::shared_ptr<QuadK>>
 			(this->m_module, quad_name.c_str(), cm)
 			.def(py::init<const Config &>());
-#if 0
-		// J.B. 14/07/23: test.
-			.def("Q_init", &QuadK::Q_init)
-#endif
-			;
+
 		std::string sext_name = "Sextupole" + this->m_suffix;
 		typedef tse::SextupoleTypeWithKnob<C> SextK;
 		py::class_<SextK, std::shared_ptr<SextK>>

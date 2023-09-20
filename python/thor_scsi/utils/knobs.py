@@ -63,21 +63,22 @@ def make_magnet_strength_knobbable(
 ):
     if multipole_number is None:
         multipole_number = magnet.get_main_multipole_number()
-    k_orig = magnet.get_main_multipole_strength().to_object()
+    k_orig = magnet.get_main_multipole_strength()
     k = gtpsa.ctpsa(desc, po, mapping=named_index)
     k.name = magnet.name + "_K"
     k.set_knob(k_orig, "K")
     # k.set_variable(k_orig, "K")
-    magnet.get_multipoles().set_multipole(multipole_number, gtpsa.CTpsaOrComplex(k))
+    print(type(magnet.get_multipoles()))
+    magnet.get_multipoles().set_multipole(multipole_number, k)
 
 
 def make_magnet_strength_unknobbable(magnet: tslib.Mpole, multipole_number: int = None):
     if multipole_number is None:
         multipole_number = magnet.get_main_multipole_number()
     mul = complex(
-        magnet.get_multipoles().get_multipole(multipole_number).to_object().get()
+        magnet.get_multipoles().get_multipole(multipole_number)
     )
-    magnet.get_multipoles().set_multipole(multipole_number, gtpsa.CTpsaOrComplex(mul))
+    magnet.get_multipoles().set_multipole(multipole_number, mul)
 
 
 def make_magnet_knobbable(

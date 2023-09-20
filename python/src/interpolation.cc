@@ -111,7 +111,9 @@ void add_methods_multipoles(py::class_<Class> t_mapper)
 {
 	t_mapper
 	        .def("get_multipole",    [](const Class& inst, int n){ return gpy::to_pyobject(inst.getMultipole(n)); })
-		.def("set_multipole",    &Class::setMultipole)
+	        .def("set_multipole",    [](Class& inst, int n, typename Types::complex_type coeff){
+		    inst.setMultipole(n, coeff);
+		})
 		.def("apply_roll_angle", &Class::applyRollAngle)
 		.def("__str__",          &Class::pstr)
 		.def("__repr__",         &Class::repr)
@@ -270,19 +272,27 @@ void py_thor_scsi_init_field_interpolation(py::module &m) {
 	    > multipoles_tpsa_base(m, "_MultipolesBaseTpsa", field2dintpvar);
 	        add_methods_multipoles<tsc::TpsaVariantType, tsc::TwoDimensionalMultipolesKnobbed<tsc::TpsaVariantType>>(multipoles_tpsa_base);
 
-		py::class_<tsc::TwoDimensionalMultipolesTpsa, std::shared_ptr<tsc::TwoDimensionalMultipolesTpsa>>
-		    multipoles_tpsa(m, "TwoDimensionalMultipolesTpsa", multipoles_tpsa_base //, py::buffer_protocol()
-			);
-        multipoles_tpsa
-                .def("set_multipole",  [](tsc::TwoDimensionalMultipolesTpsa& inst, const unsigned int n, gtpsa::ctpsa& obj){
+        multipoles_tpsa_base
+                .def("set_multipole",  [](tsc::TwoDimensionalMultipolesKnobbed<tsc::TpsaVariantType>& inst, const unsigned int n, gtpsa::ctpsa& obj){
                     inst.setMultipole(n, obj);
                 })
-                .def("set_multipole",  [](tsc::TwoDimensionalMultipolesTpsa& inst, const unsigned int n, std::complex<double>& obj){
+                .def("set_multipole",  [](tsc::TwoDimensionalMultipolesKnobbed<tsc::TpsaVariantType>& inst, const unsigned int n, std::complex<double> obj){
                     inst.setMultipole(n, obj);
                 })
                 ;
+		py::class_<tsc::TwoDimensionalMultipolesTpsa, std::shared_ptr<tsc::TwoDimensionalMultipolesTpsa>>
+		    multipoles_tpsa(m, "TwoDimensionalMultipolesTpsa", multipoles_tpsa_base //, py::buffer_protocol()
+			);
         add_methods_multipoles<tsc::TpsaVariantType, tsc::TwoDimensionalMultipolesTpsa>(multipoles_tpsa);
 		multipoles_tpsa
+		    // why do I need that here again ...
+		    // does it not cast down here from above?
+		    .def("set_multipole",  [](tsc::TwoDimensionalMultipolesTpsa& inst, const unsigned int n, gtpsa::ctpsa& obj){
+			inst.setMultipole(n, obj);
+		    })
+		    .def("set_multipole",  [](tsc::TwoDimensionalMultipolesTpsa& inst, const unsigned int n, std::complex<double> obj){
+			inst.setMultipole(n, obj);
+		    })
 		    .def(py::init<const std::complex<double>, const unsigned int>(), "initalise multipoles",
 			 py::arg("default_value"), py::arg("h_max") = tsc::max_multipole)
 		    // shall one return a list of base objects ?
