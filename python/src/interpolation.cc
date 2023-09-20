@@ -4,11 +4,13 @@
 #include <pybind11/operators.h>
 #include <pybind11/stl.h>
 #include <pybind11/pytypes.h>
+#include <gtpsa/python/utils.h>
 #include <thor_scsi/core/field_interpolation.h>
 #include <thor_scsi/core/multipoles.h>
 #include <complex>
 
 namespace py = pybind11;
+namespace gpy = gtpsa::python;
 namespace tsc = thor_scsi::core;
 
 typedef std::complex<double> cdbl;
@@ -108,7 +110,7 @@ template<typename Types, typename Class>
 void add_methods_multipoles(py::class_<Class> t_mapper)
 {
 	t_mapper
-		.def("get_multipole",    &Class::getMultipole)
+	        .def("get_multipole",    [](const Class& inst, int n){ return gpy::to_pyobject(inst.getMultipole(n)); })
 		.def("set_multipole",    &Class::setMultipole)
 		.def("apply_roll_angle", &Class::applyRollAngle)
 		.def("__str__",          &Class::pstr)

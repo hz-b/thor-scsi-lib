@@ -32,8 +32,9 @@ def make_magnet_offset_knobbable(
     Returns:
 
     """
-    dxv = magnet.get_dx().to_object()
-    dyv = magnet.get_dy().to_object()
+    dxv = magnet.get_dx()
+    dyv = magnet.get_dy()
+    print(type(magnet), type(dxv), type(dyv))
     dx = gtpsa.tpsa(desc, po, mapping=named_index)
     dy = gtpsa.tpsa(desc, po, mapping=named_index)
     dx.set_knob(dxv, "dx")
@@ -42,15 +43,15 @@ def make_magnet_offset_knobbable(
     # dy.set_variable(dyv, "dy")
     dx.name = magnet.name + "_dx"
     dy.name = magnet.name + "_dy"
-    magnet.set_dx(gtpsa.TpsaOrDouble(dx))
-    magnet.set_dy(gtpsa.TpsaOrDouble(dy))
+    magnet.set_dx(dx)
+    magnet.set_dy(dy)
 
 
 def make_magnet_offset_unknobbable(magnet: tslib.FieldKick):
-    dx = float(magnet.get_dx().to_object().get())
-    dy = float(magnet.get_dy().to_object().get())
-    magnet.set_dx(gtpsa.TpsaOrDouble(dx))
-    magnet.set_dy(gtpsa.TpsaOrDouble(dy))
+    dx = float(magnet.get_dx())
+    dy = float(magnet.get_dy())
+    magnet.set_dx(dx)
+    magnet.set_dy(dy)
 
 
 def make_magnet_strength_knobbable(

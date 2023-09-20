@@ -14,7 +14,7 @@
 #include <thor_scsi/elements/octupole.h>
 #include <thor_scsi/elements/corrector.h>
 #include <thor_scsi/elements/cavity.h>
-
+#include <gtpsa/python/utils.h>
 
 namespace tse = thor_scsi::elements;
 namespace tsc = thor_scsi::core;
@@ -151,22 +151,28 @@ void field_kick_add_set_methods(py::class_<Class> t_mapper)
 		;
 }
 
+namespace gpy = gtpsa::python;
+
+
+template<typename Class>
+void field_kick_add_get_methods(py::class_<Class> t_mapper)
+{
+	t_mapper
+		.def("get_dx",   [](Class &kick) { return gpy::to_pyobject(kick.getTransform()->getDx());   })
+		.def("get_dy",   [](Class &kick) { return gpy::to_pyobject(kick.getTransform()->getDy());   })
+		.def("get_roll", [](Class &kick) { return gpy::to_pyobject(kick.getTransform()->getRoll()); })
+		;
+}
+
 template<typename double_type, typename Class>
 void field_kick_add_methods(py::class_<Class> t_mapper)
 {
 
 	//using double_type;
 	field_kick_add_set_methods<double_type, Class>(t_mapper);
-	t_mapper
+	field_kick_add_get_methods(t_mapper);
 
-		.def("get_dx",
-		     [](Class &kick)
-			     {return kick.getTransform()->getDx();})
-		.def("get_dy",
-		     [](Class &kick)
-			     {return kick.getTransform()->getDy();})
-		.def("get_roll",
-		     [](Class &kick){kick.getTransform()->getRoll();})
+	t_mapper
 		.def("is_thick",
 		     &Class::isThick)
 		.def("as_thick",
