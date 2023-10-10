@@ -410,8 +410,8 @@ void py_thor_scsi_init_elements(py::module &m)
 	TemplatedClasses<tsc::TpsaVariantType> templated_classes_tpsa
 		(m, "Tpsa");
 	auto classical_magnet_tpsa = templated_classes_tpsa.buildClasses(elem_type, field_kick_tpsa);
-	classical_magnet_add_set_methods<double, tse::ClassicalMagnetWithKnob<tsc::StandardDoubleType>> (classical_magnet_tpsa);
-	classical_magnet_add_set_methods<gtpsa::tpsa, tse::ClassicalMagnetWithKnob<tsc::TpsaVariantType>> (classical_magnet_tpsa);
+	classical_magnet_add_set_methods<double,      tse::ClassicalMagnetWithKnob<tsc::StandardDoubleType>> (classical_magnet_tpsa);
+	classical_magnet_add_set_methods<gtpsa::tpsa, tse::ClassicalMagnetWithKnob<tsc::TpsaVariantType   >> (classical_magnet_tpsa);
 
 
 
