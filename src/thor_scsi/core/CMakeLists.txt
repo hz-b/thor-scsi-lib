@@ -54,12 +54,8 @@ target_include_directories(test_two_dimensional_multipoles
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 target_link_libraries(test_two_dimensional_multipoles
-        # PRIVATE Boost::boost
-        #  quadmath
-        # gsl
-        # gslcblas
-        # gtpsa::c++
-        # gtpsa
+        gtpsa::gtpsa-c++
+        gtpsa::gtpsa
         ${Boost_PRG_EXEC_MONITOR_LIBRARY}
         ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )

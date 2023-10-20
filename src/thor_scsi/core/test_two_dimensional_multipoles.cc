@@ -3,7 +3,6 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 #include <thor_scsi/core/multipoles.h>
-#include <gtpsa/utils_tps.hpp>
 #include <cmath>
 #include <array>
 
@@ -265,18 +264,6 @@ BOOST_AUTO_TEST_CASE(test20_set_harmonic_quadrupole)
 		std::cout << "Bx\n " << Bx << "\n"
 			  << "By\n " << By << "\n";
 
-	}
-	{
-
-		auto x = tps(0, 0+1);
-		auto y = tps(0, 2+1);
-		tps Bx, By;
-
-		std::cout << "x\n " << x << "\n"
-			  << "y\n " << y << "\n";
-		h.field(x, y, &Bx, &By);
-		std::cout << "Bx\n " << Bx << "\n"
-			  << "By\n " << By << "\n";
 	}
 	{
 		auto x = t_ref.clone(), y = t_ref.clone(), Bx = t_ref.clone(), By = t_ref.clone();
