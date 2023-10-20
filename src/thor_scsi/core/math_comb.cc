@@ -17,7 +17,7 @@ unsigned long thor_scsi::core::binom(unsigned long n, unsigned long k) {
                         strm << "(c/i = "<< c/i << ") >= (ULONG_MAX/n " << ULONG_MAX/n << ")."
 			     << " n = " << n << ", k = " << k << ", c = " << c
                                 ;
-                        std::overflow_error(strm.str());
+                        throw std::overflow_error(strm.str());
                         return 0;
                 }
                 // split c * n / i into (c / i * i + c % i) * n / i

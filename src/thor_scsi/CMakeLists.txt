@@ -179,55 +179,12 @@ target_link_libraries(test_transform_phase_space
 
 add_test(transform_phase_space test_transform_phase_space)
 
-## add_executable(a_kick  elements/a_kick.cc)
-## target_include_directories(a_kick
-##     PUBLIC
-##     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>"
-##     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
-## )
-## target_link_libraries(a_kick
-##   thor_scsi
-##   thor_scsi_core
-##   tpsa_lin
-##   # PRIVATE Boost::boost
-##   #  quadmath
-##     ${Boost_PRG_EXEC_MONITOR_LIBRARY}
-##     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-## )
-
-#
-# Non linear part needs still to be ported to new interface
-## set(tpsa_nlin_FILES
-##     tpsa_for_pm.cc
-##     # tpsa_for.cc
-## )
-##
-## add_library(tpsa_nlin SHARED
-##   ${tpsa_common_FILES}
-##   ${tpsa_nlin_FILES}
-##   ${tpsa_HEADERS}
-## )
-
-
-
-## set(thor_scsi_CORE_HEADERS
-##   thor/core/util.h
-##   flame/core/base.h
-##   flame/core/config.h
-##   )
-##
-##
-##
-## add_library(thor_scsi SHARED
-##   ${thor_scsi_CORE_files}
-##   ${thor_scsi_CORE_HEADERS}
-## )
-
 
 add_subdirectory(elements)
 add_subdirectory(std_machine)
 add_subdirectory(examples)
 add_subdirectory(custom)
+add_subdirectory(core)
 
 # ---- install helpers --
 
