@@ -101,10 +101,11 @@ def extract_orbit_from_standard_observers(
     tps_tmp = [ob.get_truncated_power_series_a() for ob in ob_sub]
     logger.debug(tps_tmp)
     tps = xr.DataArray(
-        data=[t.jacobian() for t in tps_tmp],
+        data=np.array([t.jacobian() for t in tps_tmp], float),
         name="tps_jacobian",
         dims=["index", "phase_coordinate_row", "phase_coordinate_col"],
-        coords=[indices, phase_space_coords_names, phase_space_coords_names],
+# todo: don't understand where this comes from
+        coords=[indices, phase_space_coords_names, phase_space_coords_names + ["unknown"]],
     )
     ps = xr.DataArray(
         data=[np.array(t.cst().iloc) for t in tps_tmp],
