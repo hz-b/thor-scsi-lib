@@ -14,7 +14,13 @@ import thor_scsi.lib as tslib
 import gtpsa
 from thor_scsi.factory import accelerator_from_config
 from thor_scsi.utils.closed_orbit import compute_closed_orbit
+from thor_scsi.utils import canonical_variables_mapping_default
 
+from thor_scsi.utils.accelerator import (
+    instrument_with_standard_observers,
+    extract_orbit_from_standard_observers,
+    extract_orbit_from_accelerator_with_standard_observers,
+)
 
 path = (
     Path(os.path.dirname(__file__))
@@ -28,6 +34,7 @@ def create_acc():
 
 
 def test10_closed_orbit_for_zero():
+
     calc_config = tslib.ConfigType()
     acc = create_acc()
 
@@ -55,6 +62,20 @@ def test10_closed_orbit_for_zero():
     assert x0.delta == pytest.approx(0, abs=1e-9)
     assert x0.ct == pytest.approx(ct_save, abs=1e-9)
 
+
+def test20_closed_orbit_for_zero_ovservers():
+    """test functions used by twin
+
+    just that they execute without error
+    """
+    calc_config = tslib.ConfigType()
+    acc = create_acc()
+    observers_non_perturbated = instrument_with_standard_observers(
+        acc, mapping=canonical_variables_mapping_default
+    )
+    result = compute_closed_orbit(acc, calc_config, delta=0e0)
+    assert result.found_closed_orbit == True
+    extract_orbit_from_accelerator_with_standard_observers(acc)
 
 def compensate_quadrupole_offset_with_dipole_kick(quad):
     dx = quad.get_dx()
