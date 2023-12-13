@@ -7,11 +7,13 @@
 #include <gtpsa/python/utils.h>
 #include <thor_scsi/core/field_interpolation.h>
 #include <thor_scsi/core/multipoles.h>
+#include <thor_scsi/custom/nonlinear_kicker_interpolation.h>
 #include <complex>
 
 namespace py = pybind11;
 namespace gpy = gtpsa::python;
 namespace tsc = thor_scsi::core;
+namespace tsu = thor_scsi::custom;
 
 typedef std::complex<double> cdbl;
 typedef std::complex<double> cdbl_intern;
@@ -307,6 +309,21 @@ void py_thor_scsi_init_field_interpolation(py::module &m) {
 	/* air coil magnets helpers */
 /* for communicating the field description		*/
 		PYBIND11_NUMPY_DTYPE(tsu::aircoil_filament_t, x, y, current);
+        py::class_<tsu::aircoil_filament_t> aircoil_filament(m, "aircoil_filament");
+        aircoil_filament
+            .def_readwrite("x", &tsu::aircoil_filament_t::x)
+            .def_readwrite("y", &tsu::aircoil_filament_t::y)
+	    .def_readwrite("current", &tsu::aircoil_filament_t::y)
+            .def("__repr__",  [](tsu::aircoil_filament_t& filament){
+		std::stringstream strm;
+		filament.show(strm, 10);
+		return strm.str();
+	    })
+	    .def(py::init([](const double x, const double y, const double current){
+		tsu::aircoil_filament_t f = {x, y, current};
+		return f;
+	    }))
+	    ;
 
 	py::class_<
 	    tsu:: AirCoilMagneticFieldKnobbed<tsc::StandardDoubleType>,
@@ -317,18 +334,23 @@ void py_thor_scsi_init_field_interpolation(py::module &m) {
 	aircoil_magnetic_field
 	    .def("set_scale", &tsu::AirCoilMagneticFieldKnobbed<tsc::StandardDoubleType>::setScale)
 	    .def("get_scale", &tsu::AirCoilMagneticFieldKnobbed<tsc::StandardDoubleType>::getScale)
+	    .def("get_used_filaments", [](tsu::AirCoilMagneticFieldKnobbed<tsc::StandardDoubleType>& inst){
+		auto tmp = inst.getUsedFilaments();
+		return (tmp);
+	     })
 	    .def(py::init([](py::array_t<tsu::aircoil_filament_t, py::array::c_style|py::array::forcecast>& a) {
 		return tsu::AirCoilMagneticField(aircoil_filaments_from_array(a));
 	    }) , "initalise with filaments (x, y, current)");
 
 	py::class_<
-	    tsu:: NonlinearKickerKnobbed<tsc::StandardDoubleType>,
-	    std::shared_ptr<tsu:: NonlinearKickerKnobbed<tsc::StandardDoubleType>>
+	    tsu::NonLinearKickerInterpolationKnobbed<tsc::StandardDoubleType>,
+	    std::shared_ptr<tsu::NonLinearKickerInterpolationKnobbed<tsc::StandardDoubleType>>
 	    >
-	    nonlinear_kicker(m, "NonlinearKicker", aircoil_magnetic_field);
+	    nonlinear_kicker(m, "NonLinearKickerInterpolation", aircoil_magnetic_field);
 
 	nonlinear_kicker
 	    .def(py::init([](py::array_t<tsu::aircoil_filament_t, py::array::c_style|py::array::forcecast>& a) {
-		return tsu::NonlinearKicker(aircoil_filaments_from_array(a));
+		return tsu::NonLinearKickerInterpolationKnobbed<tsc::StandardDoubleType>(aircoil_filaments_from_array(a));
 	    }), "initalise with filaments (x, y, current) of one quater");
+
 }
