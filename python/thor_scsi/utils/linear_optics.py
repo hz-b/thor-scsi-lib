@@ -599,10 +599,11 @@ def compute_Twiss_along_lattice(
             compute_map_and_diag(
                 n_dof, acc, calc_config, desc=desc, tpsa_order=tpsa_order
             )
-        A = gtpsa.ss_vect_tpsa(desc, 1)
-        A.set_jacobian(A_mat)
         if not stable:
             raise ValueError("Compute map and diag did not converge")
+
+        A = gtpsa.ss_vect_tpsa(desc, 1)
+        A.set_jacobian(A_mat)
         logger.info("\ncompute_Twiss_along_lattice\nA:\n" + prt2txt(A))
 
     # Not really required ... but used for convenience
